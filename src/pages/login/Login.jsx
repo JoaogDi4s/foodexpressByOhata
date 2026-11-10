@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Login.css";
-import { supabase } from "../supabase"; // importa o Supabase
+import { supabase } from "../../supabase"; // importa o Supabase
 
 export default function Login() {
   const navigate = useNavigate();

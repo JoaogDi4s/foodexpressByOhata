@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Catalog from "./pages/Catalog";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import OrderStatus from "./pages/OrderStatus";
-import Delivery from "./pages/Delivery";
-import Rating from "./pages/Rating";
+import Login from "./pages/login/Login";
+import Signup from "./pages/signup/Signup";
+import Catalog from "./pages/catalog/Catalog";
+import Cart from "./pages/cart/Cart";
+import Checkout from "./pages/checkout/Checkout";
+import OrderStatus from "./pages/orderstatus/OrderStatus";
+import Delivery from "./pages/delivery/Delivery";
+import Rating from "./pages/rating/Rating";
 
 export default function App() {
   return (
