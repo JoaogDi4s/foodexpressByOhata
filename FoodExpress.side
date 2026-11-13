@@ -1,0 +1,176 @@
+{
+  "id": "015aa4ea-ac4c-4cf4-8b5f-a88427e05dcf",
+  "version": "2.0",
+  "name": "FoodExpress",
+  "url": "http://localhost:5173",
+  "tests": [{
+    "id": "009b46f5-03dd-4fdd-bf0a-16abdf29f79e",
+    "name": "Requisição 1",
+    "commands": [{
+      "id": "ab08bc90-1b33-4d01-8d1e-ffd9540133a7",
+      "comment": "",
+      "command": "open",
+      "target": "/login",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e25d0493-ae06-494f-9d29-fae41a6a6270",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "976x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "27f12ee4-1bc6-4eab-85af-6eb580a1bf82",
+      "comment": "",
+      "command": "click",
+      "target": "css=.login-input:nth-child(1)",
+      "targets": [
+        ["css=.login-input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@value='']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "089db121-d350-4bd3-b3aa-35391dc44574",
+      "comment": "",
+      "command": "type",
+      "target": "css=.login-input:nth-child(1)",
+      "targets": [
+        ["css=.login-input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@value='joaoguidiasrodrigues@gmail.com']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "joaoguidiasrodrigues@gmail.com"
+    }, {
+      "id": "55064ead-9df5-4c3e-b8c6-21922aa519dc",
+      "comment": "",
+      "command": "type",
+      "target": "css=.login-input:nth-child(2)",
+      "targets": [
+        ["css=.login-input:nth-child(2)", "css:finder"],
+        ["xpath=//input[@value='seilahmeu12#']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "seilahmeu12#"
+    }, {
+      "id": "74d0c910-aea8-47a1-9a9c-85a1ce9c54c2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.login-button",
+      "targets": [
+        ["css=.login-button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Entrar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eefc66c0-cc4b-40c0-9238-9cb435577f0e",
+      "comment": "",
+      "command": "assertAlert",
+      "target": "Login realizado com sucesso!",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d3bbc251-6aac-4b34-9e0f-cbef9f146fd7",
+      "comment": "",
+      "command": "click",
+      "target": "css=.catalog-grid",
+      "targets": [
+        ["css=.catalog-grid", "css:finder"],
+        ["xpath=//div[@id='root']/div/div", "xpath:idRelative"],
+        ["xpath=//div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "21ed1290-23e4-4a57-a515-8016b37485b0",
+    "name": "Requisição 2",
+    "commands": [{
+      "id": "3c82b1ea-cde6-45b7-8728-d464df8f8e9a",
+      "comment": "",
+      "command": "open",
+      "target": "/login",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8fef4e61-3109-4084-9a75-67fbb673ef9e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "976x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "32fb12ce-89ae-422b-ad81-f7dba861cb59",
+      "comment": "",
+      "command": "click",
+      "target": "css=.login-input:nth-child(1)",
+      "targets": [
+        ["css=.login-input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@value='']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7e0ad2fa-d2de-4ab5-880a-3d86f26130e4",
+      "comment": "",
+      "command": "type",
+      "target": "css=.login-input:nth-child(1)",
+      "targets": [
+        ["css=.login-input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@value='joaoguidiasrodrigues@gmail.com']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "joaoguidiasrodrigues@gmail.com"
+    }, {
+      "id": "cfe3a862-89e3-4300-bf68-507eb25174ae",
+      "comment": "",
+      "command": "type",
+      "target": "css=.login-input:nth-child(2)",
+      "targets": [
+        ["css=.login-input:nth-child(2)", "css:finder"],
+        ["xpath=//input[@value='123']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "340b3283-5a97-4979-b842-8f353c2f3446",
+      "comment": "",
+      "command": "click",
+      "target": "css=.login-button",
+      "targets": [
+        ["css=.login-button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div[2]/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Entrar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c6c35492-ac02-47a6-8138-f2b9cd45780e",
+      "comment": "",
+      "command": "assertAlert",
+      "target": "Erro no login: Invalid login credentials",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "ce5b4365-a369-4018-8f89-1eb5cff1085c",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost:5173/"],
+  "plugins": []
+}
