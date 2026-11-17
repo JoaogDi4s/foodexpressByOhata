@@ -1,281 +1,182 @@
-# Food Express
+# Introdução
 
-Esse projeto foi originalmente desenvolvido por Daniel Ohata (https://github.com/dr-ohata/foodexpress).
-Utilizado na disciplina de UX e Testes de Software.
+Este repositório documenta testes de autenticação do **FoodExpress**, projeto originalmente desenvolvido por [Daniel Ohata](https://github.com/dr-ohata/foodexpress), utilizado na disciplina de UX/UI e Testes de Software da UniFacens.
 
-# Teste Caixa Cinza com Supabase e Postman
+A atividade utiliza Supabase para autenticação por e-mail e senha, Postman Desktop para requisições HTTP e GitHub para documentação. Como complemento, foram registrados testes de interface com Selenium IDE.
 
-Atividade da Aula 11 da disciplina **UX/UI e Testes de Software** (AS406TSN1, UniFacens).
+As evidências disponíveis comprovam o login válido pela API e a execução de cinco cenários na interface. Os cenários inválidos ainda precisam de evidências específicas no Postman para completar os requisitos da atividade.
 
-O objetivo é aplicar testes funcionais em uma aplicação moderna, integrando modelagem, validação, autenticação, testes de API e automação de testes em um projeto real. O projeto utilizado é o **FoodExpress**, com autenticação de usuários (cadastro e login) feita pelo **Supabase**.
+# Objetivo da Atividade
 
-## Sumário
+Aplicar testes de caixa cinza em uma API de autenticação, utilizando conhecimento parcial de sua estrutura: endpoint, headers, corpo JSON e respostas HTTP.
 
-- [Visão geral](#visão-geral)
-- [Tecnologias](#tecnologias)
-- [Pré-requisitos](#pré-requisitos)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Etapa 1: Modelagem dos testes](#etapa-1-modelagem-dos-testes)
-- [Etapa 2: Configuração do Supabase](#etapa-2-configuração-do-supabase)
-- [Etapa 3: Testes de API com Postman](#etapa-3-testes-de-api-com-postman)
-- [Etapa 4: Configuração e execução do FoodExpress](#etapa-4-configuração-e-execução-do-foodexpress)
-- [Etapa 5: Testes de interface com Selenium IDE](#etapa-5-testes-de-interface-com-selenium-ide)
-- [Casos de teste](#casos-de-teste)
-- [Planilhas de registro](#planilhas-de-registro)
-- [Referências](#referências)
+Os objetivos são configurar o Supabase, criar usuários de teste, configurar requisições no Postman, validar status HTTP e respostas JSON, verificar o retorno de token e registrar os resultados obtidos.
 
-## Visão geral
+# Configuração do Supabase
 
-O FoodExpress permite que o cliente:
+Foi criado um projeto chamado **FoodExpress** no Supabase. O painel apresenta o projeto, e o provedor Email aparece habilitado na configuração de autenticação. Também foram criados usuários para os testes.
 
-- **Registrar-se**: cria uma conta com e-mail e senha.
-- **Fazer login**: acessa o sistema com e-mail e senha.
+A configuração permite verificar se credenciais válidas geram uma sessão e se entradas inválidas têm o acesso negado. A URL do projeto e a chave da API são utilizadas para conectar o Postman ao serviço de autenticação.
 
-O fluxo principal identifica o usuário e concede acesso. O fluxo alternativo bloqueia o acesso quando alguma credencial está incorreta.
+As imagens documentam o estado do ambiente; não registram todas as telas do processo de criação dos usuários.
 
-O projeto é testado em três níveis:
+## Evidências
 
-| Nível | Ferramenta | Tipo de teste |
-|---|---|---|
-| API / autenticação | Postman | Caixa cinza |
-| Interface | Selenium IDE (Edge) | Caixa preta, automatizado |
-| Modelagem | PlantUML (diagramas de caso de uso, atividades e sequência) | Análise antes da implementação |
+![Projeto criado](prints/supabase/01-projeto-criado.png)
 
-## Tecnologias
+![Painel do Supabase](prints/supabase/02-painel-do-supabase.png)
 
-- **Frontend:** React + Vite
-- **Roteamento:** React Router DOM
-- **Autenticação e banco:** Supabase (PostgreSQL)
-- **Cliente:** `@supabase/supabase-js`
-- **Testes de API:** Postman (versão desktop)
-- **Testes de interface:** Selenium IDE 3.x (plugin do Microsoft Edge)
-- **Diagramas:** PlantUML
+![Autenticação por e-mail habilitada](prints/supabase/03-autenticacao-por-email-habilitada.png)
 
-## Pré-requisitos
+![Usuários criados](prints/supabase/04-usuarios-criados.png)
 
-- Node.js e npm instalados
-- Conta gratuita no [Supabase](https://supabase.com) (o plano gratuito permite até dois projetos)
-- Conta gratuita no [Postman](https://www.postman.com/downloads/) e aplicativo desktop instalado
-- Microsoft Edge com a extensão [Selenium IDE](https://microsoftedge.microsoft.com/addons/detail/selenium-ide/ajdpfmkffanmkhejnopjppegokpogffp)
-- Acesso a um e-mail válido para confirmação de cadastro (se a confirmação estiver habilitada)
+![URL e credenciais da API](prints/supabase/05-url-e-credenciais-da-api.png)
 
-## Estrutura do projeto
+# Configuração do Postman
 
-```
-foodexpress/
-├── .env                  # credenciais do Supabase (NÃO versionar)
-├── src/
-│   ├── supabase.js       # cliente Supabase
-│   └── pages/
-│       ├── Login.jsx     # tela de acesso
-│       └── Signup.jsx    # tela de cadastro
-└── ...
-```
+As evidências mostram o workspace de João Guilherme, uma coleção com a requisição de autenticação e o Environment **FoodExpress**. O ambiente concentra os valores reutilizados nas requisições.
 
-Coloque o projeto em um caminho sem espaços e fora da pasta de usuário do Windows, por exemplo `C:\foodexpress`. Isso evita problemas de permissão com `npm`, `node` e `vite`.
-
-## Etapa 1: Modelagem dos testes
-
-Antes de codificar, os fluxos são representados em diagramas:
-
-1. **Diagrama de caso de uso:** identifica as ações do usuário (Realizar Login Válido, Realizar Login Inválido, Exibir Mensagem de Erro, Redirecionar para Dashboard).
-2. **Diagrama de atividades:** descreve o procedimento do usuário. Cada cenário deve ser um diagrama isolado.
-3. **Diagrama de sequência:** mostra a comunicação entre Tester, Navegador e Sistema FoodExpress, incluindo as requisições HTTP.
-
-Os cenários de teste são derivados do fluxo básico e dos fluxos alternados, conforme o critério de caso de uso:
-
-| Cenário | Composição |
-|---|---|
-| 1 | Fluxo básico (login válido) |
-| 2 | Fluxo básico + fluxo alternado 1 |
-| 3 | Fluxo básico + fluxo alternado 1 + fluxo alternado 2 |
-| 4 | Fluxo básico + fluxo alternado 3 |
-| 5 | Fluxo básico + fluxo alternado 3 + fluxo alternado 1 |
-| 6 | Fluxo básico + fluxo alternado 3 + fluxo alternado 1 + fluxo alternado 2 |
-| 7 | Fluxo básico + fluxo alternado 4 |
-| 8 | Fluxo básico + fluxo alternado 3 + fluxo alternado 4 |
-
-## Etapa 2: Configuração do Supabase
-
-1. Crie um projeto chamado **foodexpress** em *New project*, com região *Americas*.
-2. Em **Authentication → Sign In / Providers**, confirme que o provedor **Email** está em *Enabled*.
-3. A opção **Confirm email** é opcional. Se estiver ativada, o usuário só acessa após confirmar o e-mail. Para simplificar os testes, deixe-a desmarcada.
-4. Em **Authentication → Users**, clique em **Add user** e cadastre um e-mail e senha para os testes.
-5. Em **Connect** (barra superior), escolha o framework **React** com variante **Vite** e copie a **Project URL** e a **API Key** (`anon public`).
-
-> **Importante:** nunca publique a chave em repositórios públicos. A chave pública é segura apenas quando há Row Level Security configurado nas tabelas.
-
-## Etapa 3: Testes de API com Postman
-
-### 3.1 Ambiente
-
-Crie um workspace chamado **FoodExpress Supabase** e, em **Environments**, crie as variáveis:
-
-| Variável | Valor |
+| Variável | Finalidade |
 |---|---|
 | `base_url` | URL do projeto Supabase |
-| `api_key` | Chave `anon public` |
-| `email` | E-mail cadastrado no Supabase |
-| `senha` | Senha do usuário cadastrado |
-| `access_token` | Preenchido automaticamente pelo script de teste |
+| `api_key` | Chave de acesso à API |
+| `email` | E-mail do usuário de teste |
+| `senha` | Senha do usuário; nome utilizado no ambiente registrado |
+| `access_token` | Token de acesso associado ao login |
 
-### 3.2 Coleção
+O enunciado solicita a variável `password`. Nas evidências, foi utilizado o nome `senha`. Para padronizar a entrega, é necessário renomear essa variável para `password` e atualizar sua referência no body.
 
-Crie a coleção **FoodExpress API Tests** com duas requisições.
+O Postman é utilizado para enviar a requisição e inspecionar status HTTP, resposta JSON e resultados das validações.
 
-**Requisição 1: Login Válido**
+## Evidências
 
-- Método: `POST`
-- URL: `{{base_url}}/auth/v1/token?grant_type=password`
-- Headers:
-  - `apikey: {{api_key}}`
-  - `Content-Type: application/json`
-- Body (raw, JSON):
-  ```json
-  {
-    "email": "{{email}}",
-    "password": "{{senha}}"
-  }
-  ```
+![Workspace criado](prints/postman/01-workspace-criado.png)
 
-**Requisição 2: Login Inválido**
+![Organização da coleção e do Environment](prints/postman/02-organizacao-da-colecao-e-environment.png)
 
-Duplique a Requisição 1, renomeie e substitua o corpo por credenciais incorretas:
+![Environment e variáveis configuradas](prints/postman/03-environment-e-variaveis-configuradas.png)
+
+# Configuração das Requisições
+
+A autenticação utiliza o método `POST` no endpoint:
+
+```text
+{{base_url}}/auth/v1/token?grant_type=password
+```
+
+A finalidade é enviar e-mail e senha ao Supabase e obter uma sessão quando as credenciais forem aceitas.
+
+## Headers
+
+| Header | Valor utilizado no registro |
+|---|---|
+| `apikey` | `{{api_key}}` |
+| `Content-Type` | `application/json` |
+
+O enunciado também exige o header `Authorization`, que não aparece no print dos headers. Sua configuração e evidência permanecem pendentes.
+
+## Body JSON
+
+O corpo registrado utiliza as variáveis do Environment:
 
 ```json
 {
-  "email": "teste@facens.br",
-  "password": "123456"
+  "email": "{{email}}",
+  "password": "{{senha}}"
 }
 ```
 
-### 3.3 Scripts de teste (aba Scripts → Post-response)
+Após padronizar o nome da variável solicitada no enunciado, a referência da senha deverá ser `{{password}}`. O campo JSON continua sendo `password` em ambos os casos.
 
-Adicione na coleção (ou em cada requisição):
+## Evidências
 
-```javascript
-pm.test("Status code é 200", function () {
-    pm.response.to.have.status(200);
-});
+![Método POST e endpoint configurado](prints/postman/04-metodo-post-e-endpoint-configurado.png)
 
-pm.test("Resposta contém access_token", function () {
-    var jsonData = pm.response.json();
-    pm.expect(jsonData).to.have.property("access_token");
-    pm.environment.set("access_token", jsonData.access_token);
-});
+![Headers da requisição](prints/postman/05-headers-da-requisicao.png)
 
-pm.test("Status code é 400 (erro esperado)", function () {
-    pm.response.to.have.status(400);
-});
+![Body JSON com e-mail e senha](prints/postman/06-body-json-email-e-senha.png)
 
-pm.test("Mensagem de erro é 'Credenciais de acesso erradas'", function () {
-    var jsonData = pm.response.json();
-    pm.expect(jsonData.msg).to.include("Invalid login credentials");
-});
-```
+# Execução dos Testes
 
-Os dois primeiros testes validam o login válido. Os dois últimos validam o login inválido.
+No Postman, as imagens mostram uma autenticação válida com status `200 OK`, resposta JSON e `access_token`. Também há uma validação de sucesso aprovada e uma execução de validações de erro que falharam ao receber a mesma resposta de sucesso.
 
-### 3.4 Execução
+No Selenium IDE, foram registrados cinco cenários de interface. A tabela apresenta os resultados visíveis, sem atribuir aos testes de interface resultados HTTP que não foram registrados.
 
-- Para executar tudo: selecione a coleção e clique em **Run**, depois em **Run FoodExpress API Tests**.
-- Para executar uma requisição: selecione-a e clique em **Send**.
-
-**Resultado esperado:** a Requisição 1 passa nos quatro testes e a Requisição 2 falha nos testes de status 200 e de access_token, passando nos testes de erro.
-
-## Etapa 4: Configuração e execução do FoodExpress
-
-1. Baixe o projeto:
-   ```
-   https://github.com/dr-ohata/foodexpress/tree/main
-   ```
-   (Também há uma versão de referência em https://github.com/Ernakh/foodexpressByOhata)
-
-2. Crie o arquivo **`.env`** na raiz do projeto:
-
-   ```env
-   VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
-   VITE_SUPABASE_KEY=SUA-CHAVE-ANON
-   ```
-
-3. Crie o arquivo **`src/supabase.js`**:
-
-   ```javascript
-   import { createClient } from '@supabase/supabase-js'
-
-   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-   const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
-
-   export const supabase = createClient(supabaseUrl, supabaseKey)
-   ```
-
-4. Em `src/pages/Login.jsx`, use `supabase.auth.signInWithPassword` com `email` e `password`, exibindo erro com `alert` quando houver `error`, e redirecionando para `/catalog` em caso de sucesso.
-
-5. Em `src/pages/Signup.jsx`, use `supabase.auth.signUp` com `email` e `password`, exibindo a mensagem de cadastro realizado e redirecionando para `/login`.
-
-6. Instale as dependências e execute:
-
-   ```bash
-   npm install @supabase/supabase-js
-   npm run dev
-   ```
-
-7. Acesse `http://localhost:5173/foodexpress/#/login`.
-
-**Verificação manual:**
-
-- Credenciais inválidas: deve aparecer mensagem de erro e o acesso ser negado.
-- Credenciais válidas: deve aparecer a mensagem de sucesso e o catálogo de produtos.
-
-## Etapa 5: Testes de interface com Selenium IDE
-
-1. Abra o Selenium IDE pelo ícone na barra do Edge e clique em **Create a new project**. Nomeie o projeto como **ProjetoFoodExpress**.
-2. Crie dois testes:
-   - **Requisição 1 – Login Válido**
-   - **Requisição 2 – Login Inválido**
-3. Na URL base, informe `http://localhost:5173/foodexpress/#/login`.
-4. Para cada teste, clique em **REC**, preencha e envie o formulário com os dados correspondentes e clique em **REC** novamente para parar a gravação.
-5. Execute cada teste com o botão **Play**, ou todos com **Run all tests in suite**.
-6. Salve o projeto. O arquivo gerado tem extensão `.side`.
-
-**Atenção:** o Selenium grava exatamente os cliques e digitações feitos. Evite cliques desnecessários durante a gravação.
-
-## Casos de teste
-
-| ID | Título | Pré-condição | Entrada | Resultado esperado |
+| Cenário | Entrada utilizada | Resultado esperado | Resultado obtido | Status |
 |---|---|---|---|---|
-| CT01 | Login válido | Usuário cadastrado e confirmado | E-mail e senha corretos | Status 200, `access_token` retornado, acesso ao catálogo |
-| CT02 | Login inválido | — | E-mail ou senha incorretos | Status 400, mensagem "Invalid login credentials", acesso negado |
-| CT03 | Login com e-mail não confirmado | Confirmação de e-mail ativa e usuário não confirmado | E-mail e senha corretos | Acesso negado com mensagem de e-mail não confirmado |
-| CT04 | Cadastro de novo usuário | Provedor Email habilitado | E-mail válido e senha | Mensagem de cadastro realizado e redirecionamento para login |
+| Login válido | E-mail cadastrado e senha correta | HTTP 200 e access token na API; sucesso na interface | Postman retornou 200 e token; Selenium validou o alerta de sucesso | Comprovado na API e na interface |
+| Senha incorreta | E-mail correto e senha incorreta | Erro de autenticação e acesso negado | Selenium validou o alerta `Invalid login credentials` | Comprovado na interface; pendente na API |
+| Usuário inexistente | E-mail incorreto e senha de teste | Acesso negado | Selenium validou `Invalid login credentials`; a inexistência do e-mail não foi demonstrada separadamente | Evidência parcial; pendente na API |
+| Campos vazios | E-mail e senha sem preenchimento | Erro de validação | Selenium concluiu os passos de abertura e clique, sem asserção de mensagem de validação | Validação incompleta |
+| Credenciais inválidas | E-mail e senha incorretos | Mensagem de erro e acesso negado | Selenium validou o alerta `Invalid login credentials` | Comprovado na interface; pendente na API |
 
-> **Observação:** durante a execução da Requisição 2, o Supabase pode retornar `email_not_confirmed` (status 400) em vez de `invalid_credentials`. Isso ocorre quando o usuário existe mas ainda não confirmou o e-mail. Ajuste a mensagem esperada conforme o caso real e registre a diferença nas planilhas.
+As entradas da planilha são representadas como `user.email@gmail.com`, `wrong.email@gmail.com`, `user.password` e `wrong.password`. Os resultados da API para entradas inválidas ainda precisam ser registrados com seu status e JSON reais.
 
-## Planilhas de registro
+## Evidências do Postman
 
-Os testes são registrados em planilha com três abas:
+![Login válido com status HTTP 200](prints/postman/07-login-valido-status-http-200.png)
 
-1. **Informação do projeto:** ambiente, responsável e data dos testes.
-2. **Sistema:** testes realizados sobre os componentes da implementação (foco em componentes).
-3. **Aceitação:** funcionamento da interface sob a perspectiva do usuário (foco em requisitos).
+![Access token retornado](prints/postman/08-access-token-retornado.png)
 
-| ID | Requisito | Operação | Resultado esperado |
-|---|---|---|---|
-| 1 | Registrar-se | Cliente cria uma conta | Conta criada com sucesso |
-| 2 | Fazer Login | Cliente acessa o sistema | Login realizado com sucesso |
+![Resposta JSON do login válido](prints/postman/09-resposta-json-do-login-valido.png)
 
-| ID | Título | Funcionalidade/Componente | Execução | Resultado esperado |
-|---|---|---|---|---|
-| 1 | Inserir Credenciais | Interface de Login | Cliente insere nome de usuário e senha | Credenciais recebidas pela interface de login |
-| 2 | Credenciais Corretas | Servidor de Autenticação | Credenciais são enviadas ao servidor para autenticação | Login bem-sucedido |
+![Validações de status 200 e access token](prints/postman/10-validacoes-de-status-200-e-access-token.png)
 
-## Referências
+![Falhas nas validações de erro com resposta 200](prints/postman/11-falhas-nas-validacoes-de-erro-com-resposta-200.png)
 
-- CARPINETTI, Luiz Cesar Ribeiro; GEROLAMO, Mateus Cecílio. *Gestão da Qualidade ISO 9001*. São Paulo: Atlas, 2016.
-- MACHADO, Felipe Nery Rodrigues. *Análise e Gestão de Requisitos de Software: Onde Nascem os Sistemas*. 3. ed. São Paulo: Érica, 2015.
-- PRESSMAN, Roger S.; MAXIM, Bruce R. *Engenharia de Software: Uma Abordagem Profissional*. 8. ed. Porto Alegre: AMGH, 2016.
-- CORDELLI, Rosa Lantmann; LAUREANO, Marcos Aurelio Pchek. *Fundamentos de Software – Desempenho de Sistemas Computacionais*. São Paulo: Érica, 2014.
-- MACHADO, Felipe Nery Rodrigues. *Banco de Dados – Projeto e Implementação*. São Paulo: Érica, 2014.
-- MANZANO, José Augusto N. G.; OLIVEIRA, Jayr Figueiredo de. *Algoritmos – Lógica para Desenvolvimento de Programação de Computadores*. São Paulo: Érica, 2016.
-- MANZANO, José Augusto N. G.; LOURENÇO, André Evandro; MATOS, Edivaldo. *Algoritmos – Técnicas de Programação*. São Paulo: Érica, 2016.
-- STAIR, Ralph M.; REYNOLDS, George W. *Princípios de Sistemas de Informação*. 11. ed. São Paulo: Cengage Learning, 2016.
+As validações de erro esperavam status 400 e mensagem de credenciais inválidas, mas receberam uma resposta 200. Esse registro mostra uma incompatibilidade entre o cenário enviado e as verificações executadas. As validações devem ser separadas por cenário; não é evidência de rejeição de credenciais inválidas pela API.
+
+## Evidências complementares do Selenium
+
+![Login válido na interface](prints/selenium/01-login-valido.png)
+
+![Senha incorreta na interface](prints/selenium/02-senha-incorreta.png)
+
+![E-mail incorreto na interface](prints/selenium/03-email-incorreto.png)
+
+![Credenciais inválidas na interface](prints/selenium/04-credenciais-invalidas.png)
+
+![Execução com campos vazios](prints/selenium/05-campos-vazios.png)
+
+# Registro dos Testes
+
+Os cinco cenários foram registrados na [planilha de testes](planilha/Planilha%20POSTMAN%20%26%20Selenium.xlsx). Cada coluna representa uma requisição, com ID, cenário, entrada de e-mail, entrada de senha, resultado esperado, resultado obtido, status e observações.
+
+![Planilha preenchida com os cinco testes](prints/planilha/01-planilha-preenchida-registro-dos-cinco-testes.png)
+
+Como exemplo, o registro de senha incorreta utiliza e-mail correto e senha incorreta; o print do Selenium mostra uma asserção do alerta `Invalid login credentials` aprovada.
+
+A planilha marca os cinco registros como `Sucesso` e utiliza mensagens como `Requisição 1 completed successfully` nos resultados. Essas mensagens descrevem a conclusão da execução do Selenium. Para documentar os testes da API, é necessário registrar também o status HTTP e a resposta JSON de cada cenário.
+
+A documentação permite comparar o resultado esperado com o observado e localizar falhas nas verificações. No cenário de campos vazios, a conclusão do script não comprova o erro de validação, pois não há uma asserção correspondente no print.
+
+# Resultados Obtidos
+
+As evidências permitem confirmar:
+
+- Projeto Supabase configurado, provedor Email habilitado e usuários criados.
+- Workspace, Environment e requisição de autenticação organizados no Postman.
+- Login válido pela API com status `200 OK` e retorno de `access_token`.
+- Asserções de sucesso e de credenciais inválidas nos cenários correspondentes do Selenium.
+- Registro dos cinco cenários na planilha.
+
+Para concluir os requisitos da atividade, ainda é necessário:
+
+- Executar e registrar no Postman os quatro cenários inválidos, incluindo status HTTP, JSON e mensagens reais.
+- Demonstrar que o e-mail usado no cenário de usuário inexistente não está cadastrado.
+- Validar explicitamente o resultado de campos vazios.
+- Separar as verificações de sucesso e erro no Postman.
+- Padronizar a variável `password` e documentar o header `Authorization` exigido.
+- Complementar a planilha com resultados específicos da API.
+- Criar a pasta `/postman/` na raiz para organizar os arquivos dos testes; atualmente os prints estão em `/prints/postman/`.
+- Confirmar que o repositório GitHub está público no momento da entrega.
+
+# Conclusão
+
+A autenticação funcionou no cenário válido documentado: o Supabase retornou status 200 e um token de acesso. Os testes complementares de interface registraram o alerta de sucesso e a rejeição de credenciais incorretas.
+
+A execução ainda não está integralmente comprovada para os cinco cenários de API exigidos. Foram identificadas limitações na documentação dos resultados, nas validações de erro do Postman e na ausência de asserção no teste de campos vazios. Não há evidência suficiente para afirmar uma falha do serviço de autenticação nesses cenários.
+
+As dificuldades pessoais encontradas durante a atividade não foram descritas no material fornecido. O problema técnico visível é a execução de verificações de erro sobre uma resposta de sucesso. Como melhorias, devem ser adotadas asserções específicas por cenário, registros detalhados das respostas e organização dos arquivos do Postman.
+
+Os testes de caixa cinza são importantes porque permitem relacionar o conhecimento do endpoint, dos headers e do JSON ao comportamento observado da API, verificando tanto a geração de uma sessão válida quanto a rejeição de entradas inválidas.
