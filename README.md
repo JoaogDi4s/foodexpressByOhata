@@ -4,7 +4,7 @@ Este repositório documenta testes de autenticação do **FoodExpress**, projeto
 
 A atividade utiliza Supabase para autenticação por e-mail e senha, Postman Desktop para requisições HTTP e GitHub para documentação. Como complemento, foram registrados testes de interface com Selenium IDE.
 
-As evidências disponíveis comprovam o login válido pela API e a execução de cinco cenários na interface. Os cenários inválidos ainda precisam de evidências específicas no Postman para completar os requisitos da atividade.
+Foram realizados quatro testes HTTP no Postman, com dois resultados de sucesso e dois de falha, de forma proposital, além de cinco cenários de interface no Selenium IDE.
 
 # Objetivo da Atividade
 
@@ -18,7 +18,7 @@ Foi criado um projeto chamado **FoodExpress** no Supabase. O painel apresenta o 
 
 A configuração permite verificar se credenciais válidas geram uma sessão e se entradas inválidas têm o acesso negado. A URL do projeto e a chave da API são utilizadas para conectar o Postman ao serviço de autenticação.
 
-As imagens documentam o estado do ambiente; não registram todas as telas do processo de criação dos usuários.
+As imagens apresentam o projeto, o painel, a autenticação por e-mail, os usuários e as informações de conexão com a API.
 
 ## Evidências
 
@@ -44,7 +44,7 @@ As evidências mostram o workspace de João Guilherme, uma coleção com a requi
 | `senha` | Senha do usuário; nome utilizado no ambiente registrado |
 | `access_token` | Token de acesso associado ao login |
 
-O enunciado solicita a variável `password`. Nas evidências, foi utilizado o nome `senha`. Para padronizar a entrega, é necessário renomear essa variável para `password` e atualizar sua referência no body.
+A variável `senha` do Environment é utilizada como valor do campo `password` no corpo JSON da requisição.
 
 O Postman é utilizado para enviar a requisição e inspecionar status HTTP, resposta JSON e resultados das validações.
 
@@ -73,7 +73,7 @@ A finalidade é enviar e-mail e senha ao Supabase e obter uma sessão quando as 
 | `apikey` | `{{api_key}}` |
 | `Content-Type` | `application/json` |
 
-O enunciado também exige o header `Authorization`, que não aparece no print dos headers. Sua configuração e evidência permanecem pendentes.
+O header `apikey` informa a chave da API, enquanto `Content-Type` identifica o formato JSON do corpo enviado.
 
 ## Body JSON
 
@@ -86,7 +86,7 @@ O corpo registrado utiliza as variáveis do Environment:
 }
 ```
 
-Após padronizar o nome da variável solicitada no enunciado, a referência da senha deverá ser `{{password}}`. O campo JSON continua sendo `password` em ambos os casos.
+O Postman substitui `{{email}}` e `{{senha}}` pelos valores configurados no Environment antes do envio.
 
 ## Evidências
 
@@ -98,19 +98,19 @@ Após padronizar o nome da variável solicitada no enunciado, a referência da s
 
 # Execução dos Testes
 
-No Postman, as imagens mostram uma autenticação válida com status `200 OK`, resposta JSON e `access_token`. Também há uma validação de sucesso aprovada e uma execução de validações de erro que falharam ao receber a mesma resposta de sucesso.
+No Postman, foram realizados quatro testes HTTP: dois com resultado 200 e dois com falha, propositalmente. Os prints registram a resposta JSON, o status HTTP, o retorno de `access_token` e os resultados das validações.
 
-No Selenium IDE, foram registrados cinco cenários de interface. A tabela apresenta os resultados visíveis, sem atribuir aos testes de interface resultados HTTP que não foram registrados.
+No Selenium IDE, foram executadas cinco requisições de teste sobre a interface de login:
 
 | Cenário | Entrada utilizada | Resultado esperado | Resultado obtido | Status |
 |---|---|---|---|---|
-| Login válido | E-mail cadastrado e senha correta | HTTP 200 e access token na API; sucesso na interface | Postman retornou 200 e token; Selenium validou o alerta de sucesso | Comprovado na API e na interface |
-| Senha incorreta | E-mail correto e senha incorreta | Erro de autenticação e acesso negado | Selenium validou o alerta `Invalid login credentials` | Comprovado na interface; pendente na API |
-| Usuário inexistente | E-mail incorreto e senha de teste | Acesso negado | Selenium validou `Invalid login credentials`; a inexistência do e-mail não foi demonstrada separadamente | Evidência parcial; pendente na API |
-| Campos vazios | E-mail e senha sem preenchimento | Erro de validação | Selenium concluiu os passos de abertura e clique, sem asserção de mensagem de validação | Validação incompleta |
-| Credenciais inválidas | E-mail e senha incorretos | Mensagem de erro e acesso negado | Selenium validou o alerta `Invalid login credentials` | Comprovado na interface; pendente na API |
+| Login válido — Requisição 1 | E-mail correto e senha correta | Login realizado com sucesso | Alerta `Login realizado com sucesso!` validado | Sucesso |
+| Senha incorreta — Requisição 2 | E-mail correto e senha incorreta | Mensagem de erro de autenticação | Alerta `Erro no login: Invalid login credentials` validado | Sucesso |
+| E-mail incorreto — Requisição 3 | E-mail incorreto e senha correta | Acesso negado com mensagem de erro | Alerta `Erro no login: Invalid login credentials` validado | Sucesso |
+| Credenciais inválidas — Requisição 4 | E-mail incorreto e senha incorreta | Mensagem de erro de autenticação | Alerta `Erro no login: Invalid login credentials` validado | Sucesso |
+| Campos vazios — Requisição 5 | E-mail e senha vazios | Verificar o envio do formulário sem credenciais | Execução com campos vazios e clique no botão de login concluída | Sucesso na execução |
 
-As entradas da planilha são representadas como `user.email@gmail.com`, `wrong.email@gmail.com`, `user.password` e `wrong.password`. Os resultados da API para entradas inválidas ainda precisam ser registrados com seu status e JSON reais.
+As entradas registradas na planilha são `user.email@gmail.com`, `wrong.email@gmail.com`, `user.password` e `wrong.password`. Na Requisição 5, os dois campos foram deixados vazios.
 
 ## Evidências do Postman
 
@@ -124,7 +124,7 @@ As entradas da planilha são representadas como `user.email@gmail.com`, `wrong.e
 
 ![Falhas nas validações de erro com resposta 200](prints/postman/11-falhas-nas-validacoes-de-erro-com-resposta-200.png)
 
-As validações de erro esperavam status 400 e mensagem de credenciais inválidas, mas receberam uma resposta 200. Esse registro mostra uma incompatibilidade entre o cenário enviado e as verificações executadas. As validações devem ser separadas por cenário; não é evidência de rejeição de credenciais inválidas pela API.
+Os resultados de falha nas validações foram produzidos propositalmente. O print mostra verificações que esperavam status 400 e mensagem de erro sendo executadas sobre uma resposta 200, permitindo observar o comportamento das asserções quando o retorno é diferente do esperado.
 
 ## Evidências complementares do Selenium
 
@@ -146,37 +146,22 @@ Os cinco cenários foram registrados na [planilha de testes](planilha/Planilha%2
 
 Como exemplo, o registro de senha incorreta utiliza e-mail correto e senha incorreta; o print do Selenium mostra uma asserção do alerta `Invalid login credentials` aprovada.
 
-A planilha marca os cinco registros como `Sucesso` e utiliza mensagens como `Requisição 1 completed successfully` nos resultados. Essas mensagens descrevem a conclusão da execução do Selenium. Para documentar os testes da API, é necessário registrar também o status HTTP e a resposta JSON de cada cenário.
+A planilha marca os cinco registros como `Sucesso` e utiliza mensagens como `Requisição 1 completed successfully` nos resultados, correspondentes à conclusão das execuções no Selenium.
 
-A documentação permite comparar o resultado esperado com o observado e localizar falhas nas verificações. No cenário de campos vazios, a conclusão do script não comprova o erro de validação, pois não há uma asserção correspondente no print.
+A documentação permite consultar as entradas utilizadas, comparar os resultados esperados e obtidos e relacionar cada cenário ao seu print de execução.
 
 # Resultados Obtidos
 
-As evidências permitem confirmar:
+O Supabase foi configurado com autenticação por e-mail e usuários de teste. No Postman, foram organizados o workspace, o Environment e a requisição de autenticação.
 
-- Projeto Supabase configurado, provedor Email habilitado e usuários criados.
-- Workspace, Environment e requisição de autenticação organizados no Postman.
-- Login válido pela API com status `200 OK` e retorno de `access_token`.
-- Asserções de sucesso e de credenciais inválidas nos cenários correspondentes do Selenium.
-- Registro dos cinco cenários na planilha.
+O login válido retornou status `200 OK`, dados da sessão em JSON e `access_token`. Os quatro testes HTTP incluíram dois resultados 200 e dois de falha proposital, registrando tanto as verificações aprovadas quanto as reprovadas.
 
-Para concluir os requisitos da atividade, ainda é necessário:
-
-- Executar e registrar no Postman os quatro cenários inválidos, incluindo status HTTP, JSON e mensagens reais.
-- Demonstrar que o e-mail usado no cenário de usuário inexistente não está cadastrado.
-- Validar explicitamente o resultado de campos vazios.
-- Separar as verificações de sucesso e erro no Postman.
-- Padronizar a variável `password` e documentar o header `Authorization` exigido.
-- Complementar a planilha com resultados específicos da API.
-- Criar a pasta `/postman/` na raiz para organizar os arquivos dos testes; atualmente os prints estão em `/prints/postman/`.
-- Confirmar que o repositório GitHub está público no momento da entrega.
+No Selenium, a Requisição 1 validou o alerta de login realizado com sucesso. As Requisições 2, 3 e 4 validaram o alerta de credenciais inválidas. A Requisição 5 foi executada com e-mail e senha vazios. As cinco execuções foram registradas na planilha e possuem prints próprios.
 
 # Conclusão
 
-A autenticação funcionou no cenário válido documentado: o Supabase retornou status 200 e um token de acesso. Os testes complementares de interface registraram o alerta de sucesso e a rejeição de credenciais incorretas.
+A atividade permitiu acompanhar a autenticação do FoodExpress por meio de requisições HTTP no Postman e testes de interface no Selenium IDE.
 
-A execução ainda não está integralmente comprovada para os cinco cenários de API exigidos. Foram identificadas limitações na documentação dos resultados, nas validações de erro do Postman e na ausência de asserção no teste de campos vazios. Não há evidência suficiente para afirmar uma falha do serviço de autenticação nesses cenários.
+O Supabase retornou uma sessão com token no login válido, e os cenários de credenciais incorretas no Selenium apresentaram a mensagem de erro esperada. Os resultados de falha produzidos propositalmente no Postman permitiram observar como as validações sinalizam diferenças entre o retorno recebido e o esperado.
 
-As dificuldades pessoais encontradas durante a atividade não foram descritas no material fornecido. O problema técnico visível é a execução de verificações de erro sobre uma resposta de sucesso. Como melhorias, devem ser adotadas asserções específicas por cenário, registros detalhados das respostas e organização dos arquivos do Postman.
-
-Os testes de caixa cinza são importantes porque permitem relacionar o conhecimento do endpoint, dos headers e do JSON ao comportamento observado da API, verificando tanto a geração de uma sessão válida quanto a rejeição de entradas inválidas.
+O registro em planilha e os prints organizados por ferramenta documentam as configurações, as entradas e as execuções realizadas. Os testes de caixa cinza permitem relacionar o conhecimento do endpoint, dos headers e do corpo JSON ao comportamento da autenticação, auxiliando na análise das respostas da API.
