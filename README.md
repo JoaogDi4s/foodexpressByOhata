@@ -1,6 +1,6 @@
 # Introdução
 
-Este repositório documenta testes de autenticação do **FoodExpress**, projeto originalmente desenvolvido por [Daniel Ohata](https://github.com/dr-ohata/foodexpress), utilizado na disciplina de UX/UI e Testes de Software da UniFacens.
+Este repositório documenta testes de autenticação do **FoodExpress**, projeto originalmente desenvolvido por [Daniel Ohata](https://github.com/dr-ohata/foodexpress). A atividade da disciplina de UX/UI e Testes de Software da UniFacens foi proposta pelo **professor [Fabricio Lontero](https://github.com/Ernakh/foodexpressByOhata), com base no [repositório utilizado na tarefa](https://github.com/Ernakh/foodexpressByOhata).
 
 A atividade utiliza Supabase para autenticação por e-mail e senha, Postman Desktop para requisições HTTP e GitHub para documentação. Como complemento, foram registrados testes de interface com Selenium IDE.
 
@@ -24,13 +24,23 @@ As imagens apresentam o projeto, o painel, a autenticação por e-mail, os usuá
 
 ![Projeto criado](prints/supabase/01-projeto-criado.png)
 
+**Projeto criado:** apresenta o FoodExpress na lista de projetos do Supabase, conforme a etapa de criação do ambiente, com a identificação da organização associada ao projeto.
+
 ![Painel do Supabase](prints/supabase/02-painel-do-supabase.png)
+
+**Painel do Supabase:** mostra a visão geral do projeto FoodExpress e as informações do ambiente utilizado para os testes de autenticação.
 
 ![Autenticação por e-mail habilitada](prints/supabase/03-autenticacao-por-email-habilitada.png)
 
+**Autenticação habilitada:** apresenta as configurações de autenticação e o provedor Email habilitado para o acesso por e-mail e senha.
+
 ![Usuários criados](prints/supabase/04-usuarios-criados.png)
 
+**Usuários de teste:** mostra os usuários cadastrados em Authentication → Users, utilizados como referência para os cenários de login.
+
 ![URL e credenciais da API](prints/supabase/05-url-e-credenciais-da-api.png)
+
+**Credenciais da API:** apresenta a tela de conexão do projeto, onde são obtidas a URL e a chave utilizadas na configuração do acesso à API.
 
 # Configuração do Postman
 
@@ -52,9 +62,15 @@ O Postman é utilizado para enviar a requisição e inspecionar status HTTP, res
 
 ![Workspace criado](prints/postman/01-workspace-criado.png)
 
+**Workspace criado:** identifica o workspace de João Guilherme no Postman e o ambiente FoodExpress, atendendo ao registro da área de trabalho dos testes.
+
 ![Organização da coleção e do Environment](prints/postman/02-organizacao-da-colecao-e-environment.png)
 
+**Organização do Postman:** mostra a coleção, a requisição HTTP e o Environment FoodExpress na barra lateral, reunindo os recursos utilizados na atividade.
+
 ![Environment e variáveis configuradas](prints/postman/03-environment-e-variaveis-configuradas.png)
+
+**Environment e variáveis:** apresenta `base_url`, `api_key`, `email`, `senha` e `access_token`, utilizadas para centralizar os dados das requisições de autenticação.
 
 # Configuração das Requisições
 
@@ -92,9 +108,15 @@ O Postman substitui `{{email}}` e `{{senha}}` pelos valores configurados no Envi
 
 ![Método POST e endpoint configurado](prints/postman/04-metodo-post-e-endpoint-configurado.png)
 
+**Endpoint configurado:** mostra o método `POST` e o endereço `{{base_url}}/auth/v1/token?grant_type=password`, utilizados para solicitar a autenticação por senha.
+
 ![Headers da requisição](prints/postman/05-headers-da-requisicao.png)
 
+**Headers:** apresenta `apikey` com a variável `{{api_key}}` e `Content-Type: application/json`, identificando a chave da API e o formato dos dados enviados.
+
 ![Body JSON com e-mail e senha](prints/postman/06-body-json-email-e-senha.png)
+
+**Body JSON:** mostra os campos `email` e `password`, preenchidos com as variáveis `{{email}}` e `{{senha}}` do Environment.
 
 # Execução dos Testes
 
@@ -116,13 +138,23 @@ As entradas registradas na planilha são `user.email@gmail.com`, `wrong.email@gm
 
 ![Login válido com status HTTP 200](prints/postman/07-login-valido-status-http-200.png)
 
+**Status HTTP:** destaca o retorno `200 OK` da requisição de login válido, utilizado na verificação do sucesso da autenticação.
+
 ![Access token retornado](prints/postman/08-access-token-retornado.png)
+
+**Access token:** destaca o campo `access_token` na resposta JSON, evidenciando o token retornado após a autenticação válida.
 
 ![Resposta JSON do login válido](prints/postman/09-resposta-json-do-login-valido.png)
 
+**Resposta JSON:** apresenta os dados retornados no login válido, incluindo informações da sessão e do usuário, junto ao status `200 OK`.
+
 ![Validações de status 200 e access token](prints/postman/10-validacoes-de-status-200-e-access-token.png)
 
+**Validações aprovadas:** mostra os dois testes que verificam o status 200 e a presença de `access_token`, ambos com resultado aprovado no Postman.
+
 ![Falhas nas validações de erro com resposta 200](prints/postman/11-falhas-nas-validacoes-de-erro-com-resposta-200.png)
+
+**Falhas propositais:** apresenta as duas validações de erro reprovadas sobre uma resposta 200, registrando o comportamento dos testes quando o retorno difere do resultado esperado pela asserção.
 
 Os resultados de falha nas validações foram produzidos propositalmente. O print mostra verificações que esperavam status 400 e mensagem de erro sendo executadas sobre uma resposta 200, permitindo observar o comportamento das asserções quando o retorno é diferente do esperado.
 
@@ -130,19 +162,31 @@ Os resultados de falha nas validações foram produzidos propositalmente. O prin
 
 ![Login válido na interface](prints/selenium/01-login-valido.png)
 
+**Requisição 1 — login válido:** utiliza e-mail e senha corretos e verifica o alerta `Login realizado com sucesso!`. O log registra a conclusão da execução com sucesso.
+
 ![Senha incorreta na interface](prints/selenium/02-senha-incorreta.png)
+
+**Requisição 2 — senha incorreta:** utiliza e-mail correto e senha incorreta e valida o alerta `Erro no login: Invalid login credentials`, correspondente ao cenário de erro de autenticação.
 
 ![E-mail incorreto na interface](prints/selenium/03-email-incorreto.png)
 
+**Requisição 3 — e-mail incorreto:** utiliza e-mail incorreto e senha de teste e valida o alerta `Erro no login: Invalid login credentials`, registrando a rejeição das credenciais informadas.
+
 ![Credenciais inválidas na interface](prints/selenium/04-credenciais-invalidas.png)
 
+**Requisição 4 — credenciais inválidas:** utiliza e-mail e senha incorretos e verifica o alerta `Erro no login: Invalid login credentials`. O log apresenta a execução concluída com sucesso.
+
 ![Execução com campos vazios](prints/selenium/05-campos-vazios.png)
+
+**Requisição 5 — campos vazios:** registra a abertura da tela de login e o clique no botão sem preencher e-mail e senha, documentando a execução do cenário de entrada vazia.
 
 # Registro dos Testes
 
 Os cinco cenários foram registrados na [planilha de testes](planilha/Planilha%20POSTMAN%20%26%20Selenium.xlsx). Cada coluna representa uma requisição, com ID, cenário, entrada de e-mail, entrada de senha, resultado esperado, resultado obtido, status e observações.
 
 ![Planilha preenchida com os cinco testes](prints/planilha/01-planilha-preenchida-registro-dos-cinco-testes.png)
+
+**Registro dos testes:** apresenta a planilha preenchida com os cinco cenários, seus IDs, entradas, resultados esperados e obtidos, status e observações, conforme a etapa de documentação dos testes.
 
 Como exemplo, o registro de senha incorreta utiliza e-mail correto e senha incorreta; o print do Selenium mostra uma asserção do alerta `Invalid login credentials` aprovada.
 
@@ -165,3 +209,4 @@ A atividade permitiu acompanhar a autenticação do FoodExpress por meio de requ
 O Supabase retornou uma sessão com token no login válido, e os cenários de credenciais incorretas no Selenium apresentaram a mensagem de erro esperada. Os resultados de falha produzidos propositalmente no Postman permitiram observar como as validações sinalizam diferenças entre o retorno recebido e o esperado.
 
 O registro em planilha e os prints organizados por ferramenta documentam as configurações, as entradas e as execuções realizadas. Os testes de caixa cinza permitem relacionar o conhecimento do endpoint, dos headers e do corpo JSON ao comportamento da autenticação, auxiliando na análise das respostas da API.
+
